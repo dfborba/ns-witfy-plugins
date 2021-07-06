@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Give access to your camera so we can see you</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Give access to your microphone so we can hear you</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+		<string>voip</string>
+	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<string>YES</string>
+</dict>
+</plist>

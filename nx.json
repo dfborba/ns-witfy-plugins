@@ -1,5 +1,5 @@
 {
-	"npmScope": "nativescript",
+	"npmScope": "nswitfy",
 	"affected": {
 		"defaultBase": "master"
 	},
@@ -21,6 +21,12 @@
 			"tags": []
 		},
 		"all": {
+			"tags": []
+		},
+		"jitsi-meet": {
+			"tags": []
+		},
+		"stomp-connector": {
 			"tags": []
 		}
 	},

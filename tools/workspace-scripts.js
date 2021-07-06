@@ -57,12 +57,26 @@ module.exports = {
 			},
 		},
 		'⚙️': {
-			script: `npx cowsay "@nativescript/* packages will keep your ⚙️ cranking"`,
-			description: '_____________  @nativescript/*  _____________',
+			script: `npx cowsay "@nswitfy/* packages will keep your ⚙️ cranking"`,
+			description: '_____________  @nswitfy/*  _____________',
 		},
 		// packages
 		// build output is always in dist/packages
-		'@nativescript': {
+		'@nswitfy': {
+			// @nswitfy/jitsi-meet
+			'jitsi-meet': {
+				build: {
+					script: 'nx run jitsi-meet:build.all',
+					description: '@nswitfy/jitsi-meet: Build',
+				},
+			},
+			// @nswitfy/stomp-connector
+			'stomp-connector': {
+				build: {
+					script: 'nx run stomp-connector:build.all',
+					description: '@nswitfy/stomp-connector: Build',
+				},
+			},
 			'build-all': {
 				script: 'nx run all:build',
 				description: 'Build all packages',
@@ -73,10 +87,18 @@ module.exports = {
 			description: '_____________  Focus (VS Code supported)  _____________',
 		},
 		focus: {
+			'jitsi-meet': {
+				script: 'nx run jitsi-meet:focus',
+				description: 'Focus on @nswitfy/jitsi-meet',
+			},
+			'stomp-connector': {
+				script: 'nx run stomp-connector:focus',
+				description: 'Focus on @nswitfy/stomp-connector',
+			},
 			reset: {
 				script: 'nx run all:focus',
 				description: 'Reset Focus',
-			}
+			},
 		},
 		'.....................': {
 			script: `npx cowsay "That's all for now folks ~"`,
