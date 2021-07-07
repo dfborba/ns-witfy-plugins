@@ -1,6 +1,8 @@
+:warning: **This plugin is on development and is use mainly for Witfy projects, will be improved as needed**
+
 # Nativescript Jitsi Meet
 
-**This plugin is on development and is use mainly for Witfy projects**
+**A plugin which uses jitsi open source video conference SDK for both platforms, Android and IOS;**
 
 **PR are really welcome if you want to add or work on the checklist below**
 
@@ -10,11 +12,15 @@
 
 ### Nativescript 7+
 
-_tns plugin add @nswitfy/jitsi-meet_
+```javascript
+tns plugin add @nswitfy/jitsi-meet
+```
 
 ### Nativescript 6+
 
-_tns plugin add nativescript-jitsi-meet_
+```javascript
+tns plugin add nativescript-jitsi-meet
+```
 
 ## I'm working on
 

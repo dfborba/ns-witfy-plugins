@@ -1,10 +1,26 @@
-:warning: **This plugin is under construction.**
+:warning: **This plugin is on development and is use mainly for Witfy projects, will be improved as needed**
 
 # nativescript-stomp-connector
 
-Client connector for Websocket through STOMP protocol.
+**Client connector for Websocket through STOMP protocol.**
+
+**PR are really welcome if you want to add or work on the checklist below**
 
 This plugin use the [**NaikSoftware/StompProtocolAndroid**](https://github.com/NaikSoftware/StompProtocolAndroid) for Android and [**WrathChaos/StompClientLib**](https://github.com/WrathChaos/StompClientLib) for iOS.
+
+## Installation
+
+### Nativescript 7+
+
+```javascript
+tns plugin add @nswitfy/stomp-connector
+```
+
+### Nativescript 6+
+
+```javascript
+tns plugin add nativescript-stomp-connector
+```
 
 ### #TODO
 
@@ -13,14 +29,6 @@ This plugin use the [**NaikSoftware/StompProtocolAndroid**](https://github.com/N
 -   [ ] Add repository for service example using spring boot to this README;
 -   [ ] Add Troubleshooting to this README;
 -   [ ] Improve API documentation;
-
-## Installation
-
-Run nativescript cli to install this plugin
-
-```javascript
-tns plugin add nativescript-stomp-connector
-```
 
 # Usage
 
