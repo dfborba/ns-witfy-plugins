@@ -9,5 +9,8 @@ export class HomeComponent {
 		{
 			name: 'jitsi-meet',
 		},
+		{
+			name: 'stomp-connector',
+		},
 	];
 }

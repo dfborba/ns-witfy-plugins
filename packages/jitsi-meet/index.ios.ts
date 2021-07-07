@@ -1,5 +1,7 @@
-import { EventData } from '@nativescript/core';
-import { JitsiMeetCommon, JitsiMeetConferenceOptions } from './common';
+import { EventData, Observable } from '@nativescript/core';
+import { JitsiMeetConferenceOptions } from './index';
+
+export { JitsiMeetConferenceOptions };
 
 class MyJitsiMeetViewDelegateImpl extends NSObject implements JitsiMeetViewDelegate {
 	public static ObjCProtocols = [JitsiMeetViewDelegate];
@@ -74,7 +76,7 @@ class MyUIViewController extends UIViewController {
 	}
 }
 
-export class JitsiMeet extends JitsiMeetCommon {
+export class JitsiMeet extends Observable {
 	public events: Array<{ eventNames: string; callback: (data: EventData) => void; thisArg?: any }>;
 	public serverURL: string = '';
 

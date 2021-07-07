@@ -1,11 +1,20 @@
 # Nativescript Jitsi Meet
 
-**This plugin is on early version.**
+**This plugin is on development and is use mainly for Witfy projects**
 
-**As soon as the code improves I'll be updating the README as well.** :wink:
+**PR are really welcome if you want to add or work on the checklist below**
 
-I'll keep working on this plugin as the time pass and our project have more features related to video conference.
-If you want to know which are the next things I'll be working on take a look below.
+:wink:
+
+## Installation
+
+### Nativescript 7+
+
+_tns plugin add @nswitfy/jitsi-meet_
+
+### Nativescript 6+
+
+_tns plugin add nativescript-jitsi-meet_
 
 ## I'm working on
 
@@ -18,11 +27,7 @@ If you want to know which are the next things I'll be working on take a look bel
 
 ## Prerequisites / Requirements
 
-The only requisites I found necessary so far is that your application may use \*android:minSdkVersion **21\***;
-
-## Installation
-
-_tns plugin add nativescript-jitsi-meet_
+The only requisites I found necessary so far is that your application may use \*android:minSdkVersion **23\***;
 
 ### Android
 

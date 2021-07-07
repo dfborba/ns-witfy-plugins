@@ -6,6 +6,7 @@
     <ScrollView class="h-full">
       <StackLayout>
         <Button text="jitsi-meet" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
+        <Button text="stomp-connector" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
       </StackLayout>
     </ScrollView>
   </StackLayout>

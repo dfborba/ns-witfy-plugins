@@ -1,7 +1,9 @@
-import { Application, EventData } from '@nativescript/core';
-import { JitsiMeetCommon, JitsiMeetConferenceOptions } from './common';
+import { Application, EventData, Observable } from '@nativescript/core';
+import { JitsiMeetConferenceOptions } from './index';
 
-export class JitsiMeet extends JitsiMeetCommon {
+export { JitsiMeetConferenceOptions };
+
+export class JitsiMeet extends Observable {
 	public events: Array<{ eventNames: string; callback: (data: EventData) => void; thisArg?: any }>;
 	public serverURL: string = '';
 	private _jitsiView: io.witfy.jitsiconnector.JitsiConnectorActivity;

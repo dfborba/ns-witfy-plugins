@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { EventData, Switch } from '@nativescript/core';
-import { JitsiMeetConferenceOptions } from '../../packages/jitsi-meet/common';
-import { JitsiMeet } from './../../../../packages/jitsi-meet/index.android';
+import { JitsiMeetConferenceOptions, JitsiMeet } from '@nswitfy/jitsi-meet';
 
 @Component({
 	selector: 'demo-jitsi-meet',
