@@ -150,10 +150,17 @@ export class StompConnector extends Observable {
 				const that = new WeakRef(this);
 				this._callDebug(`[STOMP_CONNECTOR_DEBUG] attempt to subscribe to topic: ${destination}`);
 
-				const newTopiDisposable = this.mStompClient
+				const newTopicDisposable = this.mStompClient
 					.topic(destination)
 					.subscribeOn(io.reactivex.schedulers.Schedulers.io())
 					.observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+					.doFinally(
+						new io.reactivex.functions.Action({
+							run: function () {
+								that.get()._callDebug(`[STOMP_CONNECTOR_DEBUG] unsubscribePath from destination ${destination}`);
+							},
+						})
+					)
 					.subscribe(
 						new io.reactivex.functions.Consumer({
 							accept: function (topicMessage: ua.naiksoftware.stomp.dto.StompMessage) {
@@ -170,8 +177,8 @@ export class StompConnector extends Observable {
 						})
 					);
 
-				this._listOfTopicsDisposable.push({ destination: destination, disposable: newTopiDisposable });
-				this._topicCompositeDisposable.add(newTopiDisposable);
+				this._listOfTopicsDisposable.push({ destination: destination, disposable: newTopicDisposable });
+				this._topicCompositeDisposable.add(newTopicDisposable);
 			}
 		}
 	}
@@ -186,23 +193,8 @@ export class StompConnector extends Observable {
 		const that = new WeakRef(this);
 		that.get()._callDebug(`[STOMP_CONNECTOR_DEBUG] topicId? ${this.mStompClient.getTopicId(destination)}`);
 		if (!!this.mStompClient && !!this.mStompClient.getTopicId(destination)) {
-			this._removeTopicFromDisposable(destination);
-
-			this.mStompClient.unsubscribePath(destination).subscribe(
-				new io.reactivex.functions.Action({
-					run: function () {
-						that.get()._callDebug(`[STOMP_CONNECTOR_DEBUG] unsubscribePath from destination ${destination}`);
-						if (!!callback && typeof callback === 'function') {
-							callback();
-						}
-					},
-				}),
-				new io.reactivex.functions.Consumer({
-					accept: function (throwable: any /*Throwable*/) {
-						that.get()._callDebug(`[STOMP_CONNECTOR_DEBUG] unsubscribePath message error from destination: ${destination} | error: ${JSON.stringify(throwable)}`);
-					},
-				})
-			);
+			that.get()._callDebug(`[STOMP_CONNECTOR_DEBUG] unsubscribePath call dispose from ${destination}`);
+			this._removeTopicFromDisposable(destination, callback);
 		} else {
 			that.get()._callDebug(`[STOMP_CONNECTOR_DEBUG] unsubscribePath not possible because you never subscribe to ${destination}`);
 			if (!!callback && typeof callback === 'function') {
@@ -211,7 +203,7 @@ export class StompConnector extends Observable {
 		}
 	}
 
-	private _removeTopicFromDisposable(destination: string) {
+	private _removeTopicFromDisposable(destination: string, callback?: () => void) {
 		this._removeFromCallback('topics', destination);
 		const index = this._listOfTopicsDisposable.findIndex((topic) => topic.destination === destination);
 
@@ -221,6 +213,9 @@ export class StompConnector extends Observable {
 			this._topicCompositeDisposable.remove(topicDisposableToDispose.disposable);
 
 			topicDisposableToDispose.disposable.dispose();
+			if (!!callback && typeof callback === 'function') {
+				callback();
+			}
 		}
 	}
 

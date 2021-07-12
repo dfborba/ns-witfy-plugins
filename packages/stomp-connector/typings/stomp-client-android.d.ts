@@ -62,6 +62,7 @@ declare module io {
 			public subscribeOn(scheduler: io.reactivex.Scheduler): io.reactivex.Flowable<T>;
 			public unsubscribeOn(scheduler: io.reactivex.Scheduler): io.reactivex.Flowable<T>;
 			public observeOn(scheduler: io.reactivex.Scheduler): io.reactivex.Flowable<T>;
+			public doFinally(onFinally: io.reactivex.functions.Action): io.reactivex.Flowable<T>;
 		}
 
 		export class CompletableObserver extends java.lang.Object {

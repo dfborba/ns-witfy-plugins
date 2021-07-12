@@ -6,8 +6,7 @@
 	"dependencies": {
 		"nativescript-theme-core": "file:../../node_modules/nativescript-theme-core",
 		"@nativescript/core": "file:../../node_modules/@nativescript/core",
-		"@nswitfy/stomp-connector": "file:../../packages/stomp-connector",
-		"@nswitfy/jitsi-meet": "file:../../packages/jitsi-meet"
+		"@nswitfy/stomp-connector": "file:../../packages/stomp-connector"
 	},
 	"devDependencies": {
 		"@nativescript/android": "7.0.1",
