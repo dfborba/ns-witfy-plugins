@@ -15,6 +15,7 @@
 		"reflect-metadata": "file:../../node_modules/reflect-metadata",
 		"rxjs": "file:../../node_modules/rxjs",
 		"zone.js": "file:../../node_modules/zone.js",
+		"@nswitfy/jitsi-meet": "file:../../dist/packages/jitsi-meet",
 		"@nswitfy/stomp-connector": "file:../../dist/packages/stomp-connector"
 	},
 	"devDependencies": {

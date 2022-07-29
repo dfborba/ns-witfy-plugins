@@ -176,7 +176,6 @@ module.exports = (env) => {
 				'~': appFullPath,
 				'tns-core-modules': '@nativescript/core',
 				'nativescript-angular': '@nativescript/angular',
-				'@demo/shared': resolve(projectRoot, '..', '..', 'tools', 'demo'),
 				...fileReplacements,
 			},
 			symlinks: true,

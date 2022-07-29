@@ -20,5 +20,5 @@ dependencies {
     // Describe plugin native Android dependencies like
 	// implementation "groupName:pluginName:ver"
     // EXAMPLE: implementation "com.facebook.fresco:fresco:0.9.0+"
-    implementation ('org.jitsi.react:jitsi-meet-sdk:2.+') { transitive = true }
+    implementation ('org.jitsi.react:jitsi-meet-sdk:3.+') { transitive = true }
 }

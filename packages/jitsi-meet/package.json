@@ -1,6 +1,6 @@
 {
 	"name": "@nswitfy/jitsi-meet",
-	"version": "8.0.0-beta",
+	"version": "8.1.0-beta.0",
 	"description": "A plugin which uses jitsi open source video conference SDK for both platforms, Android and IOS;",
 	"main": "index",
 	"typings": "index.d.ts",
