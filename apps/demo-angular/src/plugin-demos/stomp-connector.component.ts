@@ -7,13 +7,13 @@ import { StompConfig, StompConnector, StompMessage } from '@nswitfy/stomp-connec
 	templateUrl: 'stomp-connector.component.html',
 })
 export class StompConnectorComponent {
-	private url = 'ws://10.0.0.2:4242/greetings/websocket';
+	private url = 'wss://{your-url}/broadcast/websocket';
 	private stompClient: StompConnector;
 	public connectionStatus: string = 'Not connected';
 	public logs: ObservableArray<string>;
 
 	public messageContent: string = '';
-	public token: string = 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0ZSIsImV4cCI6MTYyNTYzNzgxNCwiaWF0IjoxNjI1NjE5ODE0fQ.8bX_cmBT4gHTPhF7zYycSocr0cWLg0wDetfwJkf1RBJBrJKrn21k3n9_rKYUEUAvs7MqfrDK4CmvAAo6kP48_Q';
+	public token: string = '';
 
 	public isConnected = false;
 

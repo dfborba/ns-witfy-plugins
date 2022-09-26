@@ -1,5 +1,3 @@
-const npsUtils = require('nps-utils');
-
 module.exports = {
 	message: 'NativeScript Plugins ~ made with ❤️  Choose a command to start...',
 	pageSize: 32,
@@ -78,7 +76,7 @@ module.exports = {
 				},
 			},
 			'build-all': {
-				script: 'nx run all:build',
+				script: 'nx run-many --target=build.all --all',
 				description: 'Build all packages',
 			},
 		},
@@ -96,7 +94,7 @@ module.exports = {
 				description: 'Focus on @nswitfy/stomp-connector',
 			},
 			reset: {
-				script: 'nx run all:focus',
+				script: 'nx g @nativescript/plugin-tools:focus-packages',
 				description: 'Reset Focus',
 			},
 		},

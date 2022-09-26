@@ -1,5 +1,5 @@
 use_frameworks!
-pod "StompClientLib", :git => 'https://github.com/wrathchaos/StompClientLib'
+pod "StompClientLib"
 
 post_install do |installer|
     installer.pods_project.targets.each do |target|

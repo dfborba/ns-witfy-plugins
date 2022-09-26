@@ -1,13 +1,13 @@
 {
 	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
-		"rootDirs": [".", "../.."],
-		"baseUrl": ".",
 		"paths": {
 			"~/*": ["src/*"],
-			"@demo/shared": ["../../tools/demo/index.ts"],
-			"@nswitfy/*": ["../../dist/packages/*"]
+			"@demo/shared": ["tools/demo/index.ts"],
+			"@nswitfy/jitsi-meet": ["packages/jitsi-meet/index.d.ts"],
+			"@nswitfy/stomp-connector": ["packages/stomp-connector/index.d.ts"]
 		}
 	},
-	"files": ["./references.d.ts", "./src/main.ts"]
+	"files": ["./references.d.ts", "./src/main.ts", "./src/polyfills.ts"],
+	"include": ["../../packages/**/references.d.ts"]
 }

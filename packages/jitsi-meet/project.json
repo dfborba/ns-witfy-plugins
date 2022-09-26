@@ -1,0 +1,64 @@
+{
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"projectType": "library",
+	"generators": {},
+	"sourceRoot": "packages/jitsi-meet",
+	"targets": {
+		"build": {
+			"options": {
+				"outputPath": "dist/packages/jitsi-meet",
+				"tsConfig": "packages/jitsi-meet/tsconfig.json",
+				"packageJson": "packages/jitsi-meet/package.json",
+				"main": "packages/jitsi-meet/index.d.ts",
+				"assets": [
+					"packages/jitsi-meet/*.md",
+					"packages/jitsi-meet/index.d.ts",
+					"LICENSE",
+					{
+						"glob": "**/*",
+						"input": "packages/jitsi-meet/platforms/",
+						"output": "./platforms/"
+					}
+				]
+			},
+			"executor": "@nrwl/js:tsc",
+			"dependsOn": [
+				{
+					"target": "build.all",
+					"projects": "dependencies"
+				}
+			]
+		},
+		"build.all": {
+			"options": {
+				"commands": ["node tools/scripts/build-finish.ts jitsi-meet"],
+				"parallel": false
+			},
+			"executor": "@nrwl/workspace:run-commands",
+			"outputs": ["dist/packages/jitsi-meet"],
+			"dependsOn": [
+				{
+					"target": "build.all",
+					"projects": "dependencies"
+				},
+				{
+					"target": "build",
+					"projects": "self"
+				}
+			]
+		},
+		"focus": {
+			"options": {
+				"commands": ["nx g @nativescript/plugin-tools:focus-packages jitsi-meet"],
+				"parallel": false
+			},
+			"executor": "@nrwl/workspace:run-commands"
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": ["packages/jitsi-meet/**/*.ts"]
+			}
+		}
+	}
+}
