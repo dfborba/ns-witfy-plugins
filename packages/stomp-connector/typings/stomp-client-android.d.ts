@@ -121,7 +121,6 @@ declare module ua {
 				public send(destination: string): io.reactivex.Completable;
 				public send(destination: string, data: string): io.reactivex.Completable;
 				public send(stompMessage: ua.naiksoftware.stomp.dto.StompMessage): io.reactivex.Completable;
-				public sendHeartBeat(pingMessage: string): void;
 				public lifecycle(): io.reactivex.Flowable<ua.naiksoftware.stomp.dto.LifecycleEvent>;
 				public reconnect(): void;
 				public disconnect(): void;
@@ -130,7 +129,6 @@ declare module ua {
 				public topic(destinationPath: string, stompHeaders: java.util.List<ua.naiksoftware.stomp.dto.StompHeader>): io.reactivex.Flowable<ua.naiksoftware.stomp.dto.StompMessage>;
 				public isConnected(): boolean;
 				public getTopicId(dest: string): any;
-				public unsubscribePath(dest: string): io.reactivex.Completable;
 			}
 
 			export module dto {

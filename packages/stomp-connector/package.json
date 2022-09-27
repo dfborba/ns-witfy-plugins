@@ -1,6 +1,6 @@
 {
 	"name": "@nswitfy/stomp-connector",
-	"version": "8.0.1-beta",
+	"version": "8.2.1-beta",
 	"description": "Client connector for Websocket through STOMP protocol",
 	"main": "index",
 	"typings": "index.d.ts",
