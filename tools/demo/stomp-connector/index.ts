@@ -4,20 +4,20 @@ import { StompConfig, StompConnector, StompMessage } from '@nswitfy/stomp-connec
 import { DemoSharedBase } from '../utils';
 
 export class DemoSharedStompConnector extends DemoSharedBase {
-	private url = 'wss://dev-witfy.asuscomm.com:10443/broadcast/websocket';
+	private url = 'wss://{your-server-url}';
 	private stompClient: StompConnector;
 	public connectionStatus: string = 'Not connected';
-	public logs: ObservableArray<string>;
+	public logs: ObservableArray<{ log: string }>;
 
 	public messageContent: string = '';
-	public token: string = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3YzYzYTA2MjI2MmJlYWE2OWNlMmFjYjI3MmM5NTBlNCIsInJvbGUiOiJBVFRFTkRBTlQiLCJpc3MiOiJXaXRmeS5pbyIsImFjY2VwdF90ZXJtcyI6ZmFsc2UsImVtYWlsX2NvbmZpcm1lZCI6dHJ1ZSwiZXhwIjoxNjcyMzA3NTc4LCJpYXQiOjE2NjQ0NDUxNzh9.AUDQ6uf4trcH4MZciYLcvwtkZbjv2QgWL4JZdcTt2AmgZxiSZZdp__I6BR0n6Q84bJiEm7tiH8_wuzSA-R6CvA';
+	public token: string = '';
 
 	public isConnected = false;
 
 	constructor() {
 		super();
 		this.stompClient = new StompConnector();
-		this.logs = new ObservableArray<string>();
+		this.logs = new ObservableArray<{ log: string }>();
 	}
 
 	connect() {
@@ -32,36 +32,24 @@ export class DemoSharedStompConnector extends DemoSharedBase {
 			},
 			onConnect: () => {
 				this.connectionStatus = 'CONNECTED';
-				console.log(`
-				STATUS: ${this.connectionStatus}
-				`);
-				this.logs.unshift('CONNECTED');
+				this.logs.unshift({ log: 'CONNECTED' });
 				this.isConnected = true;
 			},
 			onStompError: (error) => {
 				this.connectionStatus = 'ERROR';
-				console.log(`
-				STATUS: ${this.connectionStatus}
-				`);
-				this.logs.unshift('ERROR');
-				this.logs.unshift(error);
+				this.logs.unshift({ log: 'ERROR' });
+				this.logs.unshift({ log: error });
 			},
 			onDisconnect: () => {
 				this.connectionStatus = 'DISCONNECT';
-				console.log(`
-				STATUS: ${this.connectionStatus}
-				`);
 				this.isConnected = false;
-				this.logs.unshift('DISCONNECT');
+				this.logs.unshift({ log: 'DISCONNECT' });
 			},
 			onFailedServerHeartBeat: (error: string) => {
-				this.logs.unshift(`${error}`);
+				this.logs.unshift({ log: `${error}` });
 			},
 			debug: (msg: string) => {
-				this.logs.unshift(`${msg}`);
-				console.log(`
-				STATUS: ${this.connectionStatus}
-				`);
+				this.logs.unshift({ log: `${msg}` });
 			},
 		} as StompConfig);
 	}
@@ -71,22 +59,21 @@ export class DemoSharedStompConnector extends DemoSharedBase {
 	}
 
 	subscribeToTopic() {
-		this.stompClient.topic('/topic/broadcast', (response: StompMessage) => {
-			console.log('------------------ SUBSCRIPTION RESPONSE -------------------');
-			console.dir(response);
-			this.logs.unshift(JSON.stringify(response.payload));
+		this.stompClient.topic(`/queue/messages/chat-id-cf20870b-f522-42d7-a400-078a42bd6d47`, (response: StompMessage) => {
+			this.logs.unshift({ log: 'Message from subscription' });
 		});
 	}
 
 	unsubscribeToTopic() {
-		this.stompClient.unsubscribe('/topic/broadcast', () => {
-			console.log('Unsubscribed successfully');
+		this.stompClient.unsubscribe('/queue/messages/chat-id-cf20870b-f522-42d7-a400-078a42bd6d47', () => {
+			this.logs.unshift({ log:
+				'Unsubscribed successfully [/queue/messages/chat-id-cf20870b-f522-42d7-a400-078a42bd6d47]' });
 		});
 	}
 
 	sendMessage() {
 		this.stompClient.send({ message: this.messageContent, destination: '/app/greetings' }, () => {
-			this.logs.unshift('Message just sent!');
+			this.logs.unshift({ log: 'Message just sent!' });
 		});
 	}
 
@@ -98,12 +85,12 @@ export class DemoSharedStompConnector extends DemoSharedBase {
 				withHeaders: { 'content-type': 'application/json' },
 			},
 			() => {
-				this.logs.unshift('Message just sent!');
+				this.logs.unshift({ log: 'Message just sent!' });
 			}
 		);
 	}
 
 	connected() {
-		this.logs.unshift('Is connected? ' + (this.stompClient.isConnected() ? 'YES' : 'NO'));
+		this.logs.unshift({ log: 'Is connected? ' + (this.stompClient.isConnected() ? 'YES' : 'NO') });
 	}
 }

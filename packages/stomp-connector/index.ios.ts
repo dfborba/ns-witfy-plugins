@@ -9,7 +9,6 @@ class MyStompClientLibDelegateImpl extends NSObject implements StompClientLibDel
 	private _owner: WeakRef<any>;
 
 	public static initWithOwner(owner: WeakRef<any>): MyStompClientLibDelegateImpl {
-		console.log('initWithOwner');
 		let delegate = this.new();
 		delegate._owner = owner;
 		return delegate;
@@ -20,7 +19,6 @@ class MyStompClientLibDelegateImpl extends NSObject implements StompClientLibDel
 	}
 
 	stompClientWithClientDidReceiveMessageWithJSONBodyAkaStringBodyWithHeaderWithDestination(client: StompClientLib, jsonBody: string, stringBody: string, headers: any, destination: string): void {
-		console.log('stompClientWithClientDidReceiveMessageWithJSONBodyAkaStringBodyWithHeaderWithDestination');
 		if (!!this._owner) {
 			this._owner.get()._callDebug(`stompClientDidReceiveMessageWithJSONBodyWithJSONBodyAkaStringBodyWithHeaderWithDestination: ${jsonBody} | ${stringBody} | ${headers} | ${destination}`);
 			this._owner.get()._notify('topics', destination, stringBody);
@@ -28,7 +26,6 @@ class MyStompClientLibDelegateImpl extends NSObject implements StompClientLibDel
 	}
 
 	stompClientDidConnectWithClient(client: StompClientLib): void {
-		console.log('stompClientDidConnect');
 		if (!!this._owner) {
 			this._owner.get().connected = true;
 			this._owner.get()._callDebug(`stompClientDidConnect`);
@@ -37,7 +34,6 @@ class MyStompClientLibDelegateImpl extends NSObject implements StompClientLibDel
 	}
 
 	stompClientDidDisconnectWithClient(client: StompClientLib): void {
-		console.log('stompClientDidDisconnectWithClient');
 		if (!!this._owner) {
 			this._owner.get().connected = false;
 			this._owner.get()._callDebug(`stompClientDidDisconnectWithClient`);
@@ -46,14 +42,12 @@ class MyStompClientLibDelegateImpl extends NSObject implements StompClientLibDel
 	}
 
 	serverDidSendReceiptWithClientWithReceiptId(client: StompClientLib, receiptId: string): void {
-		console.log('serverDidSendReceiptWithClientWithReceiptId');
 		if (!!this._owner) {
 			this._owner.get()._callDebug(`serverDidSendReceiptWithClientWithReceiptId | ${receiptId}`);
 		}
 	}
 
 	serverDidSendErrorWithClientWithErrorMessageDetailedErrorMessage(client: StompClientLib, description: string, message: string): void {
-		console.log('serverDidSendErrorWithClientWithErrorMessageDetailedErrorMessage');
 		if (!!this._owner) {
 			this._owner.get()._callDebug(`serverDidSendErrorWithClientWithErrorMessageDetailedErrorMessage: ${description} | ${message} `);
 			this._owner.get().connected = false;
@@ -63,7 +57,6 @@ class MyStompClientLibDelegateImpl extends NSObject implements StompClientLibDel
 	}
 
 	serverDidSendPing(): void {
-		console.log('serverDidSendPing');
 		if (!!this._owner) {
 			this._owner.get()._callDebug(`serverDidSendPing`);
 		}
@@ -90,25 +83,19 @@ export class StompConnector extends Observable {
 	}
 
 	public connect(config: StompConfig): void {
-		console.log('STOMP connect');
 		if (!!this.#mStompClient) {
 			console.log('STOMP disconnect');
 			this.disconnect();
 		}
 
-		console.log('set config');
 		this._config = config;
-		console.log('create swift entity');
 		this.#mStompClient = StompClientLib.new();
-		console.log(this.#mStompClient);
 		this._callConnectWithHeader();
 	}
 
 	private _callConnectWithHeader() {
-		console.log('callConnectWithHeader');
 		let header: NSDictionary<any, any>;
 		if (!!this._config.connectHeaders) {
-			console.log(`which header? ${this._config.connectHeaders}`);
 			header = this._buildHeader(this._config.connectHeaders);
 		}
 
@@ -117,7 +104,6 @@ export class StompConnector extends Observable {
 	}
 
 	set connected(newStatus: boolean) {
-		console.log(`connected? ${newStatus}`);
 		this._isConnected = newStatus;
 	}
 
@@ -137,6 +123,7 @@ export class StompConnector extends Observable {
 
 	public disconnect(): void {
 		this._callbacks = { topics: [], messages: [] };
+		this.#mStompClient.stopReconnect();
 		this.#mStompClient.disconnect();
 		this.#mStompClient = null;
 	}
@@ -176,6 +163,7 @@ export class StompConnector extends Observable {
 		if (!!this.#mStompClient) {
 			this._removeFromCallback('topics', destination);
 			this.#mStompClient.unsubscribeWithDestination(destination);
+			that.get()._callDebug(`[STOMP_CONNECTOR_DEBUG] unsubscribePath:  ${destination}`);
 		} else {
 			that.get()._callDebug(`[STOMP_CONNECTOR_DEBUG] unsubscribePath not possible because stomp client is null to destination: ${destination}`);
 		}
@@ -206,6 +194,7 @@ export class StompConnector extends Observable {
 	}
 
 	private _notify(type: string, destination: string, response?: any, error?: any): void {
+		this._callDebug(`[STOMP_CONNECTOR_DEBUG] notify: ${type} | ${destination}`);
 		var _cb = this._callbacks[type];
 		if (_cb.length > 0) {
 			const callBackEvent = _cb.find((cbByType) => cbByType.destination === destination);

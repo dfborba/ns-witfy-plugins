@@ -3,12 +3,21 @@
         <ActionBar title="stomp-connector" icon="" class="action-bar">
         </ActionBar>
     </Page.actionBar>
-    <StackLayout class="p-20">
+    <GridLayout class="p-20" rows="2* 2*">
         <ScrollView class="h-full">
           <StackLayout>
-            <Button text="Test stomp-connector" tap="{{ connect }}" class="btn btn-primary"/>
-
+            <Button text="Connect" tap="{{ connect }}" class="btn btn-primary"/>
+            <Button text="Disconnect" tap="{{ disconnect }}" class="btn btn-primary"/>
+			<Button text="Subscribe to Topic" tap="{{ subscribeToTopic }}" class="btn btn-primary"/>
+			<Button text="Unsubscribe" tap="{{ unsubscribeToTopic }}" class="btn btn-primary"/>
           </StackLayout>
         </ScrollView>
-    </StackLayout>
+		<ListView row="1" items="{{ logs }}">
+			<ListView.itemTemplate>
+				<StackLayout>
+					<Label class="body" textWrap="true" text="{{ log }}"></Label>
+				</StackLayout>
+			</ListView.itemTemplate>
+		</ListView>
+    </GridLayout>
 </Page>
