@@ -4,7 +4,7 @@ import { StompConnectorComponent } from './stomp-connector.component';
 
 @NgModule({
 	imports: [NativeScriptCommonModule, NativeScriptRouterModule.forChild([{ path: '', component: StompConnectorComponent }])],
-	declarations: [StompConnectorComponent],
-	schemas: [NO_ERRORS_SCHEMA],
+  declarations: [StompConnectorComponent],
+  schemas: [ NO_ERRORS_SCHEMA]
 })
 export class StompConnectorModule {}

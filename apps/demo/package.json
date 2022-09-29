@@ -1,15 +1,15 @@
 {
-	"main": "./src/app.ts",
-	"description": "NativeScript Application",
-	"license": "SEE LICENSE IN <your-license-filename>",
-	"repository": "<fill-your-repository-here>",
-	"dependencies": {
-		"@nativescript/core": "file:../../node_modules/@nativescript/core",
-		"@nswitfy/jitsi-meet": "file:../../packages/jitsi-meet",
-		"@nswitfy/stomp-connector": "file:../../packages/stomp-connector"
-	},
-	"devDependencies": {
-		"@nativescript/android": "~8.3.0",
-		"@nativescript/ios": "~8.3.0"
-	}
+  "main": "./src/app.ts",
+  "description": "NativeScript Application",
+  "license": "SEE LICENSE IN <your-license-filename>",
+  "repository": "<fill-your-repository-here>",
+  "dependencies": {
+    "@nativescript/core": "file:../../node_modules/@nativescript/core",
+    "@nswitfy/jitsi-meet": "file:../../packages/jitsi-meet",
+    "@nswitfy/stomp-connector": "file:../../packages/stomp-connector"
+  },
+  "devDependencies": {
+    "@nativescript/android": "~8.3.0",
+    "@nativescript/ios": "~8.3.0"
+  }
 }

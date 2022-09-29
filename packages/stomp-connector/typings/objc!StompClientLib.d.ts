@@ -45,7 +45,7 @@ declare class StompClientLib extends NSObject implements SRWebSocketDelegate {
 
 	isMemberOfClass(aClass: typeof NSObject): boolean;
 
-	openSocketWithURLRequestWithRequestDelegateConnectionHeaders(request: NSURLRequest, delegate: StompClientLibDelegate, connectionHeaders: NSDictionary<string, string>): void;
+	openSocketWithURLRequest(request: NSURLRequest, delegate: StompClientLibDelegate, connectionHeaders: NSDictionary<string, string>): void;
 
 	performSelector(aSelector: string): any;
 

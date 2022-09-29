@@ -3,11 +3,13 @@ import { StompConfig, StompFailMessage, StompHeaders, StompMessage, StompSendMes
 
 export { StompHeaders, StompMessage, StompFailMessage, StompConfig, StompSendMessage };
 
+@NativeClass()
 class MyStompClientLibDelegateImpl extends NSObject implements StompClientLibDelegate {
 	public static ObjCProtocols = [StompClientLibDelegate];
 	private _owner: WeakRef<any>;
 
 	public static initWithOwner(owner: WeakRef<any>): MyStompClientLibDelegateImpl {
+		console.log('initWithOwner');
 		let delegate = this.new();
 		delegate._owner = owner;
 		return delegate;
@@ -18,6 +20,7 @@ class MyStompClientLibDelegateImpl extends NSObject implements StompClientLibDel
 	}
 
 	stompClientWithClientDidReceiveMessageWithJSONBodyAkaStringBodyWithHeaderWithDestination(client: StompClientLib, jsonBody: string, stringBody: string, headers: any, destination: string): void {
+		console.log('stompClientWithClientDidReceiveMessageWithJSONBodyAkaStringBodyWithHeaderWithDestination');
 		if (!!this._owner) {
 			this._owner.get()._callDebug(`stompClientDidReceiveMessageWithJSONBodyWithJSONBodyAkaStringBodyWithHeaderWithDestination: ${jsonBody} | ${stringBody} | ${headers} | ${destination}`);
 			this._owner.get()._notify('topics', destination, stringBody);
@@ -25,14 +28,16 @@ class MyStompClientLibDelegateImpl extends NSObject implements StompClientLibDel
 	}
 
 	stompClientDidConnectWithClient(client: StompClientLib): void {
+		console.log('stompClientDidConnect');
 		if (!!this._owner) {
 			this._owner.get().connected = true;
-			this._owner.get()._callDebug(`stompClientDidConnectWithClient`);
+			this._owner.get()._callDebug(`stompClientDidConnect`);
 			this._owner.get()._config.onConnect();
 		}
 	}
 
 	stompClientDidDisconnectWithClient(client: StompClientLib): void {
+		console.log('stompClientDidDisconnectWithClient');
 		if (!!this._owner) {
 			this._owner.get().connected = false;
 			this._owner.get()._callDebug(`stompClientDidDisconnectWithClient`);
@@ -41,12 +46,14 @@ class MyStompClientLibDelegateImpl extends NSObject implements StompClientLibDel
 	}
 
 	serverDidSendReceiptWithClientWithReceiptId(client: StompClientLib, receiptId: string): void {
+		console.log('serverDidSendReceiptWithClientWithReceiptId');
 		if (!!this._owner) {
 			this._owner.get()._callDebug(`serverDidSendReceiptWithClientWithReceiptId | ${receiptId}`);
 		}
 	}
 
 	serverDidSendErrorWithClientWithErrorMessageDetailedErrorMessage(client: StompClientLib, description: string, message: string): void {
+		console.log('serverDidSendErrorWithClientWithErrorMessageDetailedErrorMessage');
 		if (!!this._owner) {
 			this._owner.get()._callDebug(`serverDidSendErrorWithClientWithErrorMessageDetailedErrorMessage: ${description} | ${message} `);
 			this._owner.get().connected = false;
@@ -56,6 +63,7 @@ class MyStompClientLibDelegateImpl extends NSObject implements StompClientLibDel
 	}
 
 	serverDidSendPing(): void {
+		console.log('serverDidSendPing');
 		if (!!this._owner) {
 			this._owner.get()._callDebug(`serverDidSendPing`);
 		}
@@ -63,12 +71,13 @@ class MyStompClientLibDelegateImpl extends NSObject implements StompClientLibDel
 }
 
 export class StompConnector extends Observable {
+	#mStompClient: any;
+
 	private _callbacks: {
 		topics: [{ destination: string; callback: (payload: StompMessage) => void; fail?: (error: StompFailMessage) => void }?];
 		messages: [{ destination: string; callback: () => void; fail?: (error: StompFailMessage) => void }?];
 	};
 
-	private _mStompClient: any;
 	private _iosDelegate: MyStompClientLibDelegateImpl;
 
 	private _config: StompConfig;
@@ -81,26 +90,34 @@ export class StompConnector extends Observable {
 	}
 
 	public connect(config: StompConfig): void {
-		if (!!this.mStompClient) {
+		console.log('STOMP connect');
+		if (!!this.#mStompClient) {
+			console.log('STOMP disconnect');
 			this.disconnect();
 		}
 
+		console.log('set config');
 		this._config = config;
-		this.mStompClient = StompClientLib.new();
-
+		console.log('create swift entity');
+		this.#mStompClient = StompClientLib.new();
+		console.log(this.#mStompClient);
 		this._callConnectWithHeader();
 	}
 
 	private _callConnectWithHeader() {
+		console.log('callConnectWithHeader');
 		let header: NSDictionary<any, any>;
 		if (!!this._config.connectHeaders) {
+			console.log(`which header? ${this._config.connectHeaders}`);
 			header = this._buildHeader(this._config.connectHeaders);
 		}
 
-		this.mStompClient.reconnectWithRequestDelegateConnectionHeadersTimeExponentialBackoff(NSURLRequest.requestWithURL(NSURL.URLWithString(this._config.brokerURL)), this._iosDelegate, header, 5000, true);
+		console.dir(this._config);
+		this.#mStompClient.reconnectWithRequestDelegateConnectionHeadersTimeExponentialBackoff(NSURLRequest.requestWithURL(NSURL.URLWithString(this._config.brokerURL)), this._iosDelegate, header, 1.0, true);
 	}
 
 	set connected(newStatus: boolean) {
+		console.log(`connected? ${newStatus}`);
 		this._isConnected = newStatus;
 	}
 
@@ -120,14 +137,14 @@ export class StompConnector extends Observable {
 
 	public disconnect(): void {
 		this._callbacks = { topics: [], messages: [] };
-		this.mStompClient.disconnect();
-		this.mStompClient = null;
+		this.#mStompClient.disconnect();
+		this.#mStompClient = null;
 	}
 
 	public topic(destination: string, callback: (payload: StompMessage) => void, fail?: (payload: StompFailMessage) => void) {
 		this._callDebug(`[STOMP_CONNECTOR_DEBUG] attempt to subscribe to topic: ${destination}`);
 
-		if (!!this.mStompClient) {
+		if (!!this.#mStompClient) {
 			if (!this._isAlreadySubscribedToTopic(destination)) {
 				this._callbacks['topics'].push({
 					destination: destination,
@@ -139,7 +156,7 @@ export class StompConnector extends Observable {
 						  },
 				});
 
-				this.mStompClient.subscribeWithDestination(destination);
+				this.#mStompClient.subscribeWithDestination(destination);
 			} else if (!!fail) {
 				fail({ destination: destination, error: 'Already subscribed to topic for destination' });
 			}
@@ -156,9 +173,9 @@ export class StompConnector extends Observable {
 
 	public unsubscribe(destination: string, callback?: () => void) {
 		const that = new WeakRef(this);
-		if (!!this.mStompClient) {
+		if (!!this.#mStompClient) {
 			this._removeFromCallback('topics', destination);
-			this.mStompClient.unsubscribeWithDestination(destination);
+			this.#mStompClient.unsubscribeWithDestination(destination);
 		} else {
 			that.get()._callDebug(`[STOMP_CONNECTOR_DEBUG] unsubscribePath not possible because stomp client is null to destination: ${destination}`);
 		}
@@ -166,24 +183,20 @@ export class StompConnector extends Observable {
 
 	public send(request: StompSendMessage, callback?: () => void, fail?: (payload: StompFailMessage) => {}) {
 		this._callDebug(`[STOMP_CONNECTOR_DEBUG] attempt to send message to destination: ${request.destination}`);
-		if (!!this.mStompClient) {
+		if (!!this.#mStompClient) {
 			let header: NSDictionary<any, any>;
 			if (!!request.withHeaders) {
 				header = this._buildHeader(request.withHeaders);
 			}
 
-			this.mStompClient.sendMessageWithMessageToDestinationWithHeadersWithReceipt(request.message, request.destination, header, request.withReceipt);
+			this.#mStompClient.sendMessageWithMessageToDestinationWithHeadersWithReceipt(request.message, request.destination, header, request.withReceipt);
 		} else if (!!fail && typeof fail === 'function') {
 			fail({ destination: request.destination, error: 'Unable to send message because client is null' });
 		}
 	}
 
-	set mStompClient(stompClient: StompClientLib) {
-		this._mStompClient = stompClient;
-	}
-
-	get mStompClient() {
-		return this._mStompClient;
+	get stompClient() {
+		return this.#mStompClient;
 	}
 
 	private _callDebug(msg: string) {

@@ -1,13 +1,11 @@
 {
-	"extends": "../../tsconfig.base.json",
-	"compilerOptions": {
-		"rootDirs": [".", "../.."],
-		"baseUrl": ".",
-		"paths": {
-			"~/*": ["src/*"],
-			"@demo/shared": ["../../tools/demo/index.ts"],
-			"@nswitfy/jitsi-meet": ["../../packages/jitsi-meet/index.d.ts"],
-			"@nswitfy/stomp-connector": ["../../packages/stomp-connector/index.d.ts"]
-		}
-	}
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDirs": [".", "../.."],
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["src/*"],
+      "@demo/shared": ["../../tools/demo/index.ts"]
+    }
+  }
 }

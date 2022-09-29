@@ -4,7 +4,7 @@ import { JitsiMeetComponent } from './jitsi-meet.component';
 
 @NgModule({
 	imports: [NativeScriptCommonModule, NativeScriptRouterModule.forChild([{ path: '', component: JitsiMeetComponent }])],
-	declarations: [JitsiMeetComponent],
-	schemas: [NO_ERRORS_SCHEMA],
+  declarations: [JitsiMeetComponent],
+  schemas: [ NO_ERRORS_SCHEMA]
 })
 export class JitsiMeetModule {}
