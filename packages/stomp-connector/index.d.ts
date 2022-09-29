@@ -39,7 +39,7 @@ export declare class StompConnector extends Observable {
 	public connect(config: StompConfig): void;
 	public disconnect(): void;
 	public isConnected(): boolean;
-	public topic(destination: string, callback: (payload: StompMessage) => void, fail?: (payload: StompFailMessage) => {}): void;
+	public topic(destination: string, callback: (payload: StompMessage) => void, fail?: (payload: StompFailMessage) => void): void;
 	public unsubscribe(destination: string, callback: () => void): void;
-	public send(request: StompSendMessage, callback?: () => void, fail?: (payload: StompFailMessage) => {}): void;
+	public send(request: StompSendMessage, callback?: () => void, fail?: (payload: StompFailMessage) => void): void;
 }

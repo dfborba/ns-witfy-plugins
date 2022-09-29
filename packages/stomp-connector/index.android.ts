@@ -38,7 +38,7 @@ export class StompConnector extends Observable {
 	private _connectToStompClientLifecycle() {
 		this._callDebug(`[STOMP_CONNECTOR_DEBUG] reconnect stomp client lifecycle!`);
 
-		this.mStompClient.withClientHeartbeat(!!this._config.heartbeatIncoming ? this._config.heartbeatIncoming : 2000).withServerHeartbeat(!!this._config.heartbeatOutgoing ? this._config.heartbeatOutgoing : 2000);
+		this.mStompClient.withClientHeartbeat(this._config.heartbeatIncoming ? this._config.heartbeatIncoming : 2000).withServerHeartbeat(this._config.heartbeatOutgoing ? this._config.heartbeatOutgoing : 2000);
 
 		this._resetSubscriptions();
 		this._resetTopicDisposables();
@@ -83,9 +83,9 @@ export class StompConnector extends Observable {
 	}
 
 	private _callConnectWithHeader() {
-		let headers = new java.util.ArrayList<ua.naiksoftware.stomp.dto.StompHeader>();
+		const headers = new java.util.ArrayList<ua.naiksoftware.stomp.dto.StompHeader>();
 
-		if (!!this._config.connectHeaders) {
+		if (this._config.connectHeaders) {
 			const keys = Object.keys(this._config.connectHeaders);
 			keys.forEach((key) => {
 				headers.add(new ua.naiksoftware.stomp.dto.StompHeader(key, this._config.connectHeaders[key]));
@@ -96,7 +96,7 @@ export class StompConnector extends Observable {
 	}
 
 	private _resetSubscriptions() {
-		if (!!this._compositeDisposable) {
+		if (this._compositeDisposable) {
 			this._compositeDisposable.dispose();
 		}
 
@@ -104,7 +104,7 @@ export class StompConnector extends Observable {
 	}
 
 	private _resetTopicDisposables() {
-		if (!!this._topicCompositeDisposable) {
+		if (this._topicCompositeDisposable) {
 			this._topicCompositeDisposable.dispose();
 		}
 
@@ -119,14 +119,14 @@ export class StompConnector extends Observable {
 	}
 
 	public disconnect() {
-		if (!!this.mStompClient) {
+		if (this.mStompClient) {
 			this.mStompClient.disconnect();
 			this.mStompClient = null;
 		}
 	}
 
 	public isConnected(): boolean {
-		if (!!this.mStompClient) {
+		if (this.mStompClient) {
 			return this.mStompClient.isConnected();
 		} else {
 			return false;
@@ -134,13 +134,13 @@ export class StompConnector extends Observable {
 	}
 
 	public topic(destination: string, callback: (payload: StompMessage) => void, fail?: (payload: StompFailMessage) => void): void {
-		if (!!this.mStompClient) {
+		if (this.mStompClient) {
 			if (!this._isAlreadySubscribedToTopic(destination)) {
 				this._callDebug(`[STOMP_CONNECTOR_DEBUG] how callback list looks like? ${JSON.stringify(this._callbacks)}`);
 				this._callbacks['topics'].push({
 					destination: destination,
 					callback: callback,
-					fail: !!fail
+					fail: fail
 						? fail
 						: (error) => {
 								console.error(error);
@@ -192,7 +192,7 @@ export class StompConnector extends Observable {
 	public unsubscribe(destination: string, callback?: () => void) {
 		const that = new WeakRef(this);
 		that.get()._callDebug(`[STOMP_CONNECTOR_DEBUG] topicId? ${this.mStompClient.getTopicId(destination)}`);
-		if (!!this.mStompClient && !!this.mStompClient.getTopicId(destination)) {
+		if (this.mStompClient && this.mStompClient.getTopicId(destination)) {
 			that.get()._callDebug(`[STOMP_CONNECTOR_DEBUG] unsubscribePath call dispose from ${destination}`);
 			this._removeTopicFromDisposable(destination, callback);
 		} else {
@@ -219,9 +219,9 @@ export class StompConnector extends Observable {
 		}
 	}
 
-	public send(request: StompSendMessage, callback?: () => void, fail?: (payload: StompFailMessage) => {}) {
+	public send(request: StompSendMessage, callback?: () => void, fail?: (payload: StompFailMessage) => void) {
 		const that = new WeakRef(this);
-		if (!!this.mStompClient) {
+		if (this.mStompClient) {
 			this._callDebug(`[STOMP_CONNECTOR_DEBUG] attempt to send message to destination: ${request.destination}`);
 
 			const _stompSendMessage = this._buildStompSendMessageRequestObject(request);
@@ -254,10 +254,10 @@ export class StompConnector extends Observable {
 	}
 
 	private _buildStompSendMessageRequestObject(request: StompSendMessage) {
-		let headers = new java.util.ArrayList<ua.naiksoftware.stomp.dto.StompHeader>();
+		const headers = new java.util.ArrayList<ua.naiksoftware.stomp.dto.StompHeader>();
 		headers.add(new ua.naiksoftware.stomp.dto.StompHeader('destination', request.destination));
 
-		if (!!request.withHeaders) {
+		if (request.withHeaders) {
 			const keys = Object.keys(request.withHeaders);
 			keys.forEach((key) => {
 				headers.add(new ua.naiksoftware.stomp.dto.StompHeader(key, request.withHeaders[key]));
@@ -276,25 +276,25 @@ export class StompConnector extends Observable {
 	}
 
 	private _callDebug(msg: string) {
-		if (!!this._config.debug) {
+		if (this._config.debug) {
 			this._config.debug(msg);
 		}
 	}
 
 	private _notify(type: string, destination: string, response?: any, error?: any): void {
-		var _cb = this._callbacks[type];
+		const _cb = this._callbacks[type];
 		if (_cb.length > 0) {
 			const callBackEvent = _cb.find((cbByType) => cbByType.destination === destination);
 			this._callDebug(`[STOMP_CONNECTOR_DEBUG] callback object to call: ${JSON.stringify(callBackEvent)}`);
-			if (!!error) {
+			if (error) {
 				this._callDebug(`[STOMP_CONNECTOR_DEBUG] has fail function?: ${!!callBackEvent.fail}`);
 				this._callDebug(`[STOMP_CONNECTOR_DEBUG] error: ${JSON.stringify(error)}`);
-				if (!!callBackEvent.fail) {
+				if (callBackEvent.fail) {
 					callBackEvent.fail({ destination: destination, error: error });
 				}
 			} else {
 				this._callDebug(`[STOMP_CONNECTOR_DEBUG] success callback for response: ${JSON.stringify(response)}`);
-				if (!!response) {
+				if (response) {
 					callBackEvent.callback({ destination: destination, payload: response });
 				} else {
 					callBackEvent.callback();
@@ -305,8 +305,8 @@ export class StompConnector extends Observable {
 
 	private _removeFromCallback(type: string, destination: string): void {
 		this._callDebug(`[STOMP_CONNECTOR_DEBUG] removing ${type} with destination ${destination} from callback listener`);
-		var topics = this._callbacks[type];
-		if (!!topics && topics.length > 0) {
+		const topics = this._callbacks[type];
+		if (topics && topics.length > 0) {
 			const index = topics.findIndex((topic) => topic.destination === destination);
 			if (index >= 0) {
 				this._callDebug(`[STOMP_CONNECTOR_DEBUG] removed from position ${index}`);

@@ -1,39 +1,39 @@
 {
-  "name": "@nswitfy/stomp-connector",
-  "version": "8.2.0-beta",
-  "description": "Client connector for Websocket through STOMP protocol",
-  "main": "index",
-  "typings": "index.d.ts",
-  "nativescript": {
-    "platforms": {
-      "ios": "6.0.0",
-      "android": "6.0.0"
-    }
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/dfborba/ns-witfy-plugins.git"
-  },
-  "keywords": [
-    "NativeScript",
-    "JavaScript",
-    "TypeScript",
-    "iOS",
-    "Android",
-    "Stomp connector",
-    "Stomp spring boot",
-    "Websocket",
-    "WS"
-  ],
-  "author": {
-    "name": "Daniel Borba",
-    "email": "daniel@witfy.io"
-  },
-  "bugs": {
-    "url": "https://github.com/dfborba/ns-witfy-plugins/issues"
-  },
-  "license": "Apache-2.0",
-  "homepage": "https://github.com/dfborba/ns-witfy-plugins",
-  "readmeFilename": "README.md",
-  "bootstrapper": "@nativescript/plugin-seed"
+	"name": "@nswitfy/stomp-connector",
+	"version": "8.2.1-beta",
+	"description": "Client connector for Websocket through STOMP protocol",
+	"main": "index",
+	"typings": "index.d.ts",
+	"nativescript": {
+		"platforms": {
+			"ios": "6.0.0",
+			"android": "6.0.0"
+		}
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/dfborba/ns-witfy-plugins.git"
+	},
+	"keywords": [
+		"NativeScript",
+		"JavaScript",
+		"TypeScript",
+		"iOS",
+		"Android",
+		"Stomp connector",
+		"Stomp spring boot",
+		"Websocket",
+		"WS"
+	],
+	"author": {
+		"name": "Daniel Borba",
+		"email": "daniel@witfy.io"
+	},
+	"bugs": {
+		"url": "https://github.com/dfborba/ns-witfy-plugins/issues"
+	},
+	"license": "Apache-2.0",
+	"homepage": "https://github.com/dfborba/ns-witfy-plugins",
+	"readmeFilename": "README.md",
+	"bootstrapper": "@nativescript/plugin-seed"
 }
